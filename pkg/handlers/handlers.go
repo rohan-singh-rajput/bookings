@@ -3,6 +3,7 @@ package handlers
 import (
 	"net/http"
 
+	models "github.com/rohan-singh-rajput/bookings/pkg/Models"
 	"github.com/rohan-singh-rajput/bookings/pkg/config"
 	"github.com/rohan-singh-rajput/bookings/pkg/render"
 )
@@ -25,9 +26,15 @@ func NewHandlers(r *Repository) {
 }
 
 func (m *Repository) Home(w http.ResponseWriter, r *http.Request) {
-	render.RenderTemplate(w, "home.page.tmpl")
+	render.RenderTemplate(w, "home.page.tmpl", &models.TemplateData{})
 }
 
 func (m *Repository) About(w http.ResponseWriter, r *http.Request) {
-	render.RenderTemplate(w, "about.page.tmpl")
+
+	stringMap := make(map[string]string)
+	stringMap["test"] = "Hello,Again"
+	render.RenderTemplate(w, "about.page.tmpl", &models.TemplateData{
+		StringMap: stringMap,
+	})
+
 }

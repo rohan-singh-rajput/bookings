@@ -7,10 +7,11 @@ import (
 	"net/http"
 	"path/filepath"
 
+	models "github.com/rohan-singh-rajput/bookings/pkg/Models"
 	"github.com/rohan-singh-rajput/bookings/pkg/config"
 )
 
-var functions = template.FuncMap{}
+// var functions = template.FuncMap{}
 
 var app *config.AppConfig
 
@@ -18,7 +19,11 @@ func NewTemplates(a *config.AppConfig) {
 	app = a
 }
 
-func RenderTemplate(w http.ResponseWriter, tmpl string) {
+func AddDefaultData(td *models.TemplateData) *models.TemplateData {
+	return td
+}
+
+func RenderTemplate(w http.ResponseWriter, tmpl string, td *models.TemplateData) {
 
 	var tc map[string]*template.Template
 
@@ -37,7 +42,10 @@ func RenderTemplate(w http.ResponseWriter, tmpl string) {
 	}
 
 	buf := new(bytes.Buffer)
-	_ = t.Execute(buf, nil)
+
+	td = AddDefaultData(td)
+
+	_ = t.Execute(buf, td)
 
 	//render the template
 	_, err := buf.WriteTo(w)
@@ -75,6 +83,10 @@ func CreateTemplateCache() (map[string]*template.Template, error) {
 
 		if len(matches) > 0 {
 			ts, err = ts.ParseGlob("./templates/*.layout.tmpl")
+
+			if err != nil {
+				log.Print(err)
+			}
 		}
 		myCache[name] = ts
 
