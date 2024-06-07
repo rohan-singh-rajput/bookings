@@ -11,7 +11,7 @@ import (
 	"github.com/rohan-singh-rajput/bookings/pkg/config"
 )
 
-// var functions = template.FuncMap{}
+var functions = template.FuncMap{}
 
 var app *config.AppConfig
 
